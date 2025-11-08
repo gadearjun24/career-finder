@@ -12,50 +12,53 @@ import {
 import Header from "../../components/common/Header";
 import { useUserContext } from "../../context/UserContext";
 import { Link } from "react-router-dom";
-import { Sun, Sunset, Moon } from "lucide-react"; // icons for morning, afternoon, evening
+import { Sun, Sunset, Moon } from "lucide-react";
 
 function Greeting() {
   const { user } = useUserContext();
   const hour = new Date().getHours();
 
   let greeting = "";
-  let Icon = Sun; // default icon
-  let iconColor = "#FACC15"; // default yellow for Sun
+  let Icon = Sun;
+  let iconColor = "#FACC15";
 
-  // Set greeting, icon, and color dynamically
   if (hour < 12) {
     greeting = "Good Morning";
     Icon = Sun;
-    iconColor = "#FACC15"; // yellow
+    iconColor = "#FACC15";
   } else if (hour < 17) {
     greeting = "Good Afternoon";
     Icon = Sunset;
-    iconColor = "#F97316"; // orange
+    iconColor = "#F97316";
   } else {
     greeting = "Good Evening";
     Icon = Moon;
-    iconColor = "#60A5FA"; // blue
+    iconColor = "#60A5FA";
   }
 
   const userName = user?.personalInfo?.name || user?.name || "User";
 
   return (
-    <div className="flex items-center gap-3 mb-6">
+    <div className="flex items-center gap-3 mb-6 animate-fade-in">
       <div
-        className="flex items-center justify-center w-10 h-10 rounded-full"
-        style={{ backgroundColor: `${iconColor}33` }} // 33 = 20% opacity
+        className="flex items-center justify-center w-10 h-10 rounded-full shadow-inner"
+        style={{ backgroundColor: `${iconColor}33` }}
       >
         <Icon size={22} color={iconColor} />
       </div>
-      <h2 className="text-2xl font-semibold text-gray-100">
-        {greeting}, <span className="text-blue-400 font-bold">{userName}</span>
+      <h2 className="text-3xl font-bold text-gray-100 tracking-wide">
+        {greeting},{" "}
+        <span className="bg-gradient-to-r from-blue-400 via-yellow-400 to-orange-400 text-transparent bg-clip-text">
+          {userName}
+        </span>
       </h2>
     </div>
   );
 }
+
 function Dashboard() {
   const { user } = useUserContext();
-  // Sample data for Career Progress Tracker chart
+
   const chartData = [
     { week: "Week 1", tests: 1, recommendations: 2 },
     { week: "Week 2", tests: 2, recommendations: 3 },
@@ -64,30 +67,32 @@ function Dashboard() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen font-poppins bg-gray-900 text-gray-100 transition-colors duration-300">
+    <div className="flex flex-col min-h-screen font-poppins bg-gradient-to-b from-gray-950 via-gray-900 to-gray-900 text-gray-100 transition-all duration-500">
       <Header title={"Dashboard"} />
 
-      {/* Main Content Area */}
+      {/* ===== Main Content ===== */}
       <div className="flex flex-1 overflow-hidden">
-        <main className="flex-1 p-6 overflow-auto pt-20">
-          {/* Greeting */}
+        <main className="flex-1 p-6 overflow-auto pt-20 max-w-7xl mx-auto w-full">
           {Greeting()}
 
-          {/* Cards Grid */}
+          {/* ===== Dashboard Cards Grid ===== */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {/* Profile Completion */}
+            {/* 🧾 Profile Completion */}
             {user.profileCompletion !== 100 && (
-              <div className="bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-                <h3 className="font-semibold mb-2 text-gray-200">
+              <div className="bg-gradient-to-br from-blue-900/80 via-blue-800/70 to-blue-700/70 border border-blue-500/30 rounded-2xl p-6 shadow-md hover:shadow-blue-500/30 transition-transform transform hover:-translate-y-1 duration-300">
+                <h3 className="font-semibold mb-3 text-gray-100 flex items-center gap-2">
                   Profile Completion
+                  <span className="text-xs text-gray-400">
+                    ({user.profileCompletion}%)
+                  </span>
                 </h3>
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-blue-700 flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-lg">
                     {user.profileCompletion}
                   </div>
                   <Link
                     to={"/student/profile"}
-                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+                    className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded hover:from-blue-400 hover:to-blue-600 transition"
                   >
                     Update Now
                   </Link>
@@ -95,22 +100,26 @@ function Dashboard() {
               </div>
             )}
 
-            {/* Aptitude Test Status */}
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-              <h3 className="font-semibold mb-2 text-gray-200">
+            {/* 🧠 Aptitude Test */}
+            <div className="bg-gradient-to-br from-yellow-900/50 via-orange-900/40 to-gray-800 border border-yellow-500/20 p-6 rounded-2xl shadow-md hover:shadow-yellow-500/20 transition-transform transform hover:-translate-y-1 duration-300">
+              <h3 className="font-semibold mb-2 text-gray-100">
                 Aptitude Test Status
               </h3>
               <p className="mb-4 text-gray-300">
-                You have completed 2/3 sections
+                You have completed{" "}
+                <span className="text-yellow-400 font-bold">2/3</span> sections
               </p>
-              <button className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-500 transition">
+              <Link
+                to={"/student/aptitude-test"}
+                className="px-3 py-1 bg-gradient-to-r from-orange-500 to-yellow-400 text-gray-900 rounded font-semibold hover:from-orange-400 hover:to-yellow-300 transition"
+              >
                 Continue Test
-              </button>
+              </Link>
             </div>
 
-            {/* Recent Career Recommendations */}
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-              <h3 className="font-semibold mb-2 text-gray-200">
+            {/* 💼 Recommendations */}
+            <div className="bg-gradient-to-br from-blue-900/80 via-blue-800/70 to-gray-900 border border-blue-500/20 p-6 rounded-2xl shadow-md hover:shadow-blue-500/30 transition-transform transform hover:-translate-y-1 duration-300">
+              <h3 className="font-semibold mb-3 text-gray-100">
                 Recent Career Recommendations
               </h3>
               <div className="flex flex-col gap-3">
@@ -121,42 +130,48 @@ function Dashboard() {
                 ].map((career) => (
                   <div
                     key={career}
-                    className="flex items-center justify-between p-2 bg-blue-900 rounded"
+                    className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-800/80 to-blue-700/60 rounded-lg text-gray-100"
                   >
                     <span>{career}</span>
-                    <a href="#" className="text-blue-400 hover:underline">
-                      View Details
+                    <a
+                      href="#"
+                      className="text-blue-400 hover:text-yellow-300 transition"
+                    >
+                      View
                     </a>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Skill Development Resources */}
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-              <h3 className="font-semibold mb-2 text-gray-200">
+            {/* 🎓 Skill Resources */}
+            <div className="bg-gradient-to-br from-gray-800 via-blue-900/40 to-blue-950 border border-blue-500/20 p-6 rounded-2xl shadow-md hover:shadow-blue-500/30 transition-transform transform hover:-translate-y-1 duration-300">
+              <h3 className="font-semibold mb-3 text-gray-100">
                 Skill Development Resources
               </h3>
-              <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
+              <div className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-2">
                 {[
                   "Data Science Basics",
                   "Communication Skills",
                   "UI/UX Fundamentals",
                   "Time Management",
                 ].map((skill) => (
-                  <div key={skill} className="p-2 bg-blue-900 rounded">
+                  <div
+                    key={skill}
+                    className="p-2 bg-blue-800/50 rounded hover:bg-blue-700/70 transition"
+                  >
                     {skill}
                   </div>
                 ))}
               </div>
-              <button className="mt-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-500 transition">
+              <button className="mt-3 px-3 py-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded hover:from-blue-500 hover:to-blue-400 transition">
                 See All
               </button>
             </div>
 
-            {/* Career Progress Tracker */}
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-lg transition col-span-1 md:col-span-2 xl:col-span-1">
-              <h3 className="font-semibold mb-2 text-gray-200">
+            {/* 📈 Career Progress Tracker */}
+            <div className="bg-gradient-to-br from-gray-800 via-gray-900/90 to-blue-950 border border-blue-500/20 p-6 rounded-2xl shadow-md hover:shadow-blue-500/30 transition-transform transform hover:-translate-y-1 duration-300 col-span-1 md:col-span-2 xl:col-span-1">
+              <h3 className="font-semibold mb-3 text-gray-100">
                 Career Progress Tracker
               </h3>
               <ResponsiveContainer width="100%" height={250}>
@@ -191,17 +206,20 @@ function Dashboard() {
               </ResponsiveContainer>
             </div>
 
-            {/* Announcements / Notifications */}
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-lg transition">
-              <h3 className="font-semibold mb-2 text-gray-200">
+            {/* 🔔 Announcements */}
+            <div className="bg-gradient-to-br from-blue-900/60 via-gray-800/80 to-gray-900 border border-blue-400/20 p-6 rounded-2xl shadow-md hover:shadow-blue-500/20 transition-transform transform hover:-translate-y-1 duration-300">
+              <h3 className="font-semibold mb-3 text-gray-100">
                 Announcements
               </h3>
               <ul className="flex flex-col gap-2">
                 {[
-                  "New Psychometric test added!",
-                  "Check top trending careers 2025",
+                  "🆕 New Psychometric test added!",
+                  "🔥 Check top trending careers 2025",
                 ].map((notice, idx) => (
-                  <li key={idx} className="p-2 bg-blue-900 rounded">
+                  <li
+                    key={idx}
+                    className="p-3 bg-gradient-to-r from-blue-800/70 to-blue-700/50 rounded-lg text-gray-200 hover:text-yellow-300 transition"
+                  >
                     {notice}
                   </li>
                 ))}
@@ -211,9 +229,14 @@ function Dashboard() {
         </main>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 text-sm p-4 mt-auto text-center shadow-inner">
-        Help | Contact | Privacy Policy | © 2025 CareerGuide+
+      {/* ===== Footer ===== */}
+      <footer className="bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 text-gray-400 text-sm p-4 mt-auto text-center border-t border-gray-700/50">
+        <p>
+          Help | Contact | Privacy Policy |{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-yellow-400 to-orange-400 font-semibold">
+            © {new Date().getFullYear()} CareerGuide+
+          </span>
+        </p>
       </footer>
     </div>
   );

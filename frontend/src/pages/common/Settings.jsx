@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  User,
-  Lock,
-  Bell,
-  Trash2,
-  Save,
-  Moon,
-  Sun,
-  Shield,
-} from "lucide-react";
+import { User, Lock, Bell, Trash2, Save, Shield } from "lucide-react";
 import Header from "../../components/common/Header";
 import { useUserContext } from "../../context/UserContext";
 
@@ -19,7 +10,6 @@ function Settings() {
     email: user?.email || "",
     contact: user?.personalInfo?.contact || "",
     address: user?.personalInfo?.address || "",
-    theme: "dark",
     notifications: true,
   });
 
@@ -62,18 +52,17 @@ function Settings() {
       );
       const data = await res.json();
       if (res.ok) {
-        console.log({ data });
         updateUser(data);
+        alert("Profile updated successfully!");
       } else {
         console.error("Update failed:", data.message);
       }
     } catch (err) {
       console.error("Error updating profile:", err);
-    } finally {
     }
   };
 
-  // 🔹 Change password handler (placeholder)
+  // 🔹 Change password handler
   const handlePasswordUpdate = () => {
     if (passwords.newPassword !== passwords.confirmPassword) {
       alert("New passwords do not match!");
@@ -89,14 +78,14 @@ function Settings() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-gray-100 font-poppins">
+    <div className="flex min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-900 text-gray-100 font-poppins">
       <Header title={"Settings"} />
 
       {/* ===== Main Content ===== */}
-      <main className="flex-1 p-6 pt-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <main className="flex-1 p-6 pt-20 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* 🔹 General Settings */}
-          <section className="bg-gray-800 p-6 rounded-2xl shadow-lg transition">
+          <section className="bg-gradient-to-br from-gray-800 via-blue-900/40 to-gray-900 border border-blue-500/20 rounded-2xl shadow-lg hover:shadow-blue-400/30 transition-all duration-300 transform hover:-translate-y-1 p-6">
             <h2 className="flex items-center gap-2 text-blue-400 text-lg font-semibold mb-4">
               <User size={18} /> General Information
             </h2>
@@ -109,7 +98,7 @@ function Settings() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
 
@@ -120,7 +109,7 @@ function Settings() {
                   name="email"
                   disabled
                   value={formData.email}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-gray-400 cursor-not-allowed"
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-400 cursor-not-allowed"
                 />
               </div>
 
@@ -131,7 +120,7 @@ function Settings() {
                   name="contact"
                   value={formData.contact}
                   onChange={handleChange}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
 
@@ -142,22 +131,22 @@ function Settings() {
                   value={formData.address}
                   onChange={handleChange}
                   rows="2"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
                 ></textarea>
               </div>
 
               <button
                 onClick={handleSave}
-                className="mt-4 w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg font-medium transition"
+                className="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:shadow-blue-400/40 py-2 rounded-lg font-medium transition"
               >
                 <Save size={16} /> Save Changes
               </button>
             </div>
           </section>
 
-          {/* 🔹 Password + Preferences */}
-          <section className="bg-gray-800 p-6 rounded-2xl shadow-lg transition space-y-6">
-            {/* Password */}
+          {/* 🔹 Security & Preferences */}
+          <section className="bg-gradient-to-br from-gray-800 via-blue-900/40 to-gray-900 border border-blue-500/20 rounded-2xl shadow-lg hover:shadow-blue-400/30 transition-all duration-300 transform hover:-translate-y-1 p-6 space-y-8">
+            {/* Password Section */}
             <div>
               <h2 className="flex items-center gap-2 text-blue-400 text-lg font-semibold mb-4">
                 <Lock size={18} /> Account Security
@@ -170,7 +159,7 @@ function Settings() {
                   placeholder="Current Password"
                   value={passwords.currentPassword}
                   onChange={handlePasswordChange}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <input
                   type="password"
@@ -178,7 +167,7 @@ function Settings() {
                   placeholder="New Password"
                   value={passwords.newPassword}
                   onChange={handlePasswordChange}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <input
                   type="password"
@@ -186,11 +175,12 @@ function Settings() {
                   placeholder="Confirm New Password"
                   value={passwords.confirmPassword}
                   onChange={handlePasswordChange}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
                 />
+
                 <button
                   onClick={handlePasswordUpdate}
-                  className="mt-2 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-400 py-2 rounded-lg font-medium hover:shadow-md transition"
+                  className="mt-3 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-400 hover:shadow-blue-400/40 py-2 rounded-lg font-medium transition"
                 >
                   <Shield size={16} /> Update Password
                 </button>
@@ -202,53 +192,32 @@ function Settings() {
               <h2 className="flex items-center gap-2 text-blue-400 text-lg font-semibold mb-3">
                 <Bell size={18} /> Preferences
               </h2>
-              <div className="flex items-center justify-between bg-gray-700 p-3 rounded-lg mb-2">
+              <div className="flex items-center justify-between bg-gray-900 border border-gray-700 p-3 rounded-lg mb-2">
                 <span className="text-gray-300">Notifications</span>
                 <input
                   type="checkbox"
                   name="notifications"
                   checked={formData.notifications}
                   onChange={handleChange}
-                  className="w-5 h-5 accent-blue-500"
+                  className="w-5 h-5 accent-blue-500 cursor-pointer"
                 />
-              </div>
-              <div className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
-                <span className="text-gray-300 flex items-center gap-2">
-                  Theme{" "}
-                  {formData.theme === "dark" ? (
-                    <Moon size={16} />
-                  ) : (
-                    <Sun size={16} />
-                  )}
-                </span>
-                <button
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      theme: prev.theme === "dark" ? "light" : "dark",
-                    }))
-                  }
-                  className="bg-blue-600 px-3 py-1 rounded-lg text-sm font-medium hover:bg-blue-500 transition"
-                >
-                  {formData.theme === "dark" ? "Dark" : "Light"}
-                </button>
               </div>
             </div>
           </section>
         </div>
 
         {/* 🔹 Danger Zone */}
-        <section className="bg-gray-800 p-6 rounded-2xl shadow-lg mt-6">
+        <section className="bg-gradient-to-br from-gray-800 via-red-900/30 to-gray-900 border border-red-500/20 rounded-2xl shadow-lg hover:shadow-red-400/30 transition-all duration-300 transform hover:-translate-y-1 p-6">
           <h2 className="flex items-center gap-2 text-red-400 text-lg font-semibold mb-3">
             <Trash2 size={18} /> Danger Zone
           </h2>
           <p className="text-gray-400 text-sm mb-4">
             Deleting your account will permanently remove your profile, data,
-            and test history.
+            and test history. This action cannot be undone.
           </p>
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 py-2 rounded-lg w-full md:w-auto px-6 font-medium transition"
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-500 hover:shadow-red-400/40 py-2 rounded-lg w-full md:w-auto px-6 font-medium transition"
           >
             Delete My Account
           </button>
@@ -256,25 +225,25 @@ function Settings() {
 
         {/* 🔹 Confirm Delete Modal */}
         {showDeleteConfirm && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-lg w-96 text-center">
+          <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 animate-fadeIn">
+            <div className="bg-gradient-to-br from-gray-900 via-red-900/30 to-gray-900 border border-red-500/20 p-6 rounded-2xl shadow-xl w-96 text-center">
               <h3 className="text-lg font-semibold text-red-400 mb-3">
                 Confirm Account Deletion
               </h3>
-              <p className="text-gray-300 mb-4">
+              <p className="text-gray-300 mb-4 text-sm">
                 Are you sure you want to permanently delete your account? This
                 action cannot be undone.
               </p>
               <div className="flex justify-center gap-4">
                 <button
                   onClick={handleDelete}
-                  className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg text-white font-medium transition"
+                  className="bg-gradient-to-r from-red-600 to-red-500 hover:shadow-red-400/40 px-4 py-2 rounded-lg text-white font-medium transition"
                 >
                   Yes, Delete
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-lg text-white font-medium transition"
+                  className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-white font-medium transition"
                 >
                   Cancel
                 </button>
