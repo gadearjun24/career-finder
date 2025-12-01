@@ -5,15 +5,22 @@ const {
   loginUser,
   getUserProfile,
   updateUserProfile,
+  getAllUsers,
+  deleteUser,
 } = require("../controllers/userController");
-const { protect } = require("../middleware/auth");
+
+const { protect, authorize } = require("../middleware/auth");
 
 // Public
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
-// Private
+// Private (Authenticated)
 router.get("/profile", protect, getUserProfile);
 router.put("/profile", protect, updateUserProfile);
+
+// Admin-only
+router.get("/", protect, authorize("admin"), getAllUsers);
+router.delete("/:id", protect, authorize("admin"), deleteUser);
 
 exports.userRouter = router;

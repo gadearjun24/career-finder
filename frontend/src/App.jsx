@@ -56,10 +56,14 @@ import Login from "./pages/auth/Login";
 import Settings from "./pages/common/Settings";
 // import NotFound from "./pages/common/NotFound"; // create this page
 import { useUserContext } from "./context/UserContext";
+import CollegeDashboard from "./pages/College/Dashboard";
+import Colleges from "./pages/College/Colleges";
+import CollegeDetail from "./pages/College/CollegeDetail";
+import Courses from "./pages/College/Courses";
+import CourseDetail from "./pages/College/CourseDetail";
 
 export default function App() {
   const { user } = useUserContext();
-
   // Protected route wrapper
   const ProtectedRoute = ({ children }) => {
     if (!user) {
@@ -77,7 +81,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
 
         {/* Protected Student Routes */}
-        {user && (
+        {user && user.role === "student" && (
           <Route path="/student" element={<Layout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
@@ -98,6 +102,36 @@ export default function App() {
         {/* Protected routes with fallback */}
         <Route
           path="/student/*"
+          element={
+            <ProtectedRoute>
+              <h1>Not Found</h1>
+            </ProtectedRoute>
+          }
+        />
+
+        {user && user.role === "college" && (
+          <Route path="/college" element={<Layout />}>
+            <Route path="dashboard" element={<CollegeDashboard />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="colleges" element={<Colleges />} />
+            <Route path="colleges/:id" element={<CollegeDetail />} />
+            <Route path="courses" element={<Courses />} />
+            <Route path="course/:id" element={<CourseDetail />} />
+
+            <Route
+              path="explore-courses-college"
+              element={<CoursesCollegeExplorer />}
+            />
+            <Route
+              path="guidance-resources-path"
+              element={<GuidanceResourcesLearningPath />}
+            />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+        )}
+
+        <Route
+          path="/college/*"
           element={
             <ProtectedRoute>
               <h1>Not Found</h1>

@@ -4,6 +4,9 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const { userRouter } = require("./routes/userRoutes");
 const path = require("path");
+const { collegeRouter } = require("./routes/collegeRoutes");
+const { courseRouter } = require("./routes/courseRoutes");
+const { learningPathRouter } = require("./routes/learningPathRoutes");
 
 // Load env vars
 dotenv.config();
@@ -20,6 +23,9 @@ app.use(express.static(path.join(__dirname, "public", "dist")));
 
 // Routes
 app.use("/api/users", userRouter);
+app.use("/api/college", collegeRouter);
+app.use("/api/courses", courseRouter);
+app.use("/api/learning-paths", learningPathRouter);
 
 app.get(/.*/, (req, res) => {
   return res.sendFile(path.join(__dirname, "public", "dist", "index.html"));

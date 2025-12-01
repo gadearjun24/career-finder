@@ -27,7 +27,13 @@ function Header({ title }) {
 
         {/* 👤 User Profile */}
         <Link
-          to={"/student/profile"}
+          to={`${
+            user.role === "student"
+              ? "/student/profile"
+              : user.role === "college"
+              ? "/college/profile"
+              : "/company/profile"
+          }`}
           className="flex items-center gap-3 bg-gray-800 px-3 py-1.5 rounded-full hover:bg-gray-700 transition border border-gray-700/50 shadow-sm"
         >
           <div className="w-9 h-9 rounded-full overflow-hidden ring-2 ring-blue-500/50">

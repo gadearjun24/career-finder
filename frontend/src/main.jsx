@@ -3,11 +3,17 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
+import { CollegeProvider } from "./context/CollegeContext.jsx";
+import { CourseProvider } from "./context/CourseContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <UserProvider>
-      <App />
+      <CollegeProvider>
+        <CourseProvider>
+          <App />
+        </CourseProvider>
+      </CollegeProvider>
     </UserProvider>
   </StrictMode>
 );

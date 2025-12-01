@@ -11,13 +11,14 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
+import { useUserContext } from "../../context/UserContext";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useUserContext();
 
-  const menuItems = [
+  const studentMenuItems = [
     { name: "Dashboard", icon: <Home size={20} />, path: "/student/dashboard" },
-    { name: "My Profile", icon: <User size={20} />, path: "/student/profile" },
     {
       name: "Aptitude / Psychometric Test",
       icon: <Clipboard size={20} />,
@@ -38,12 +39,50 @@ const Sidebar = () => {
       icon: <GraduationCap size={20} />,
       path: "/student/guidance-resources-path",
     },
+    { name: "My Profile", icon: <User size={20} />, path: "/student/profile" },
     {
       name: "Settings",
       icon: <Settings size={20} />,
       path: "/student/settings",
     },
   ];
+
+  const collegeMenuItems = [
+    { name: "Dashboard", icon: <Home size={20} />, path: "/college/dashboard" },
+    {
+      name: "Colleges",
+      icon: <Clipboard size={20} />,
+      path: "/college/colleges",
+    },
+    {
+      name: "Recommendations",
+      icon: <Book size={20} />,
+      path: "/student/recommendations",
+    },
+    {
+      name: "Explore Courses / Colleges",
+      icon: <Compass size={20} />,
+      path: "/student/explore-courses-college",
+    },
+    {
+      name: "Guidance Resources & Learning Path",
+      icon: <GraduationCap size={20} />,
+      path: "/student/guidance-resources-path",
+    },
+    { name: "My Profile", icon: <User size={20} />, path: "/student/profile" },
+    {
+      name: "Settings",
+      icon: <Settings size={20} />,
+      path: "/student/settings",
+    },
+  ];
+
+  const menuItems =
+    user.role === "student"
+      ? studentMenuItems
+      : user.role === "college"
+      ? collegeMenuItems
+      : studentMenuItems;
 
   return (
     <>

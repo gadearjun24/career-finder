@@ -38,7 +38,13 @@ function LandingPage() {
           <nav className="hidden md:flex gap-6 items-center">
             {user ? (
               <Link
-                to="/student/dashboard"
+                to={`${
+                  user.role === "student"
+                    ? "/student/dashboard"
+                    : user.role === "college"
+                    ? "/college/dashboard"
+                    : "/company/dashboard"
+                }`}
                 className="px-5 py-2.5 rounded-xl font-medium bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-400 hover:via-blue-500 hover:to-blue-600 transition-all duration-300 shadow-md hover:shadow-blue-500/30 transform hover:-translate-y-0.5 active:scale-95"
               >
                 Dashboard
@@ -72,7 +78,13 @@ function LandingPage() {
           <div className="flex gap-4 mt-4 animate-fade-in delay-200">
             {user ? (
               <Link
-                to="/student/dashboard"
+                to={`${
+                  user.role === "student"
+                    ? "/student/dashboard"
+                    : user.role === "college"
+                    ? "/college/dashboard"
+                    : "/company/dashboard"
+                }`}
                 className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 rounded-lg hover:from-blue-500 hover:to-blue-400 transition shadow-lg hover:shadow-blue-500/40 flex items-center gap-2"
               >
                 Go to Dashboard <ArrowRight size={18} />
@@ -250,7 +262,13 @@ function LandingPage() {
         </p>
         {user ? (
           <Link
-            to="/student/dashboard"
+            to={`${
+              user.role === "student"
+                ? "/student/dashboard"
+                : user.role === "college"
+                ? "/college/dashboard"
+                : "/company/dashboard"
+            }`}
             className="px-8 py-4 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition shadow-lg inline-flex items-center gap-2"
           >
             Go to Dashboard <ArrowRight size={20} />

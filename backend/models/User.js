@@ -1,59 +1,115 @@
 // File: models/User.js
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema(
   {
-    // Basic Account Info
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true },
-    role: {
+    // 🔹 Basic Info
+    name: {
       type: String,
-      enum: ["student", "college", "admin"],
-      default: "student",
+      required: true,
+      trim: true,
+      minlength: [2, "Name must be at least 2 characters long."],
+      maxlength: [50, "Name cannot exceed 50 characters."],
     },
 
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+      minlength: [6, "Password must be at least 6 characters."],
+      select: false, // hide password when fetching user
+    },
+
+    // 🔹 Role Management
+    role: {
+      type: String,
+      enum: ["student", "college", "company", "admin"],
+      default: "student",
+      index: true,
+    },
+
+    // 🔹 Avatar / Branding
     avatar: {
-      type: String, // URL to uploaded avatar image
+      type: String, // URL to profile image
       default: "",
     },
 
-    profileCompletion: {
-      type: Number, // percentage
-      default: 0,
+    // 🔹 Account Metadata
+    isVerified: { type: Boolean, default: false },
+    status: {
+      type: String,
+      enum: ["active", "inactive", "banned"],
+      default: "active",
     },
 
-    // Academic Details
-    academicDetails: {
-      schoolCollege: { type: String, trim: true },
-      grade: { type: String, trim: true },
-      stream: { type: String, trim: true },
-      subjects: [{ type: String, trim: true }],
-      achievements: { type: String, trim: true },
-    },
+    lastLogin: { type: Date },
+    lastActivity: { type: Date },
 
-    // Personal Information
-    personalInfo: {
-      name: { type: String },
-      age: { type: Number },
-      gender: { type: String, enum: ["Male", "Female", "Other"] },
-      contact: { type: String, trim: true },
+    profileCompletion: { type: Number, default: 0 },
+
+    // 🔹 Contact Info (generic across all roles)
+    contact: {
+      phone: { type: String, trim: true },
       address: { type: String, trim: true },
-      notifications: { type: String, trim: true },
-      theme: { type: String, trim: true },
+      city: { type: String, trim: true },
+      state: { type: String, trim: true },
+      country: { type: String, trim: true, default: "India" },
     },
 
-    // Skills & Interests
-    skills: [{ type: String, trim: true }],
-    interests: [{ type: String, trim: true }],
+    // 🔹 Settings
+    settings: {
+      notifications: { type: Boolean, default: true },
+      theme: { type: String, enum: ["light", "dark"], default: "dark" },
+      language: { type: String, default: "en" },
+    },
 
-    // Resume Upload
+    // 🔹 Relations (optional links)
+    studentProfileId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "StudentProfile",
+    },
+    collegeOwnerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CollegeOwner",
+    },
+    companyOwnerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CompanyOwner",
+    },
+
+    // 🔹 Resume (only for students)
     resumeUrl: {
-      type: String, // URL or file path to uploaded PDF
+      type: String,
       default: "",
     },
   },
-  { timestamps: true } // adds createdAt and updatedAt
+  { timestamps: true }
 );
+
+//
+// 🔒 Password Hash Middleware
+//
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+//
+// 🔑 Compare Password Method
+//
+UserSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
 
 module.exports = mongoose.model("User", UserSchema);
